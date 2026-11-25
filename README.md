@@ -27,14 +27,14 @@ LOANLY is a simple, all-in-one web app that takes the math out of managing your 
 4. **Loan Calculation:** Enter loan amounts and repayment terms to view a clear repayment estimate.
 5. **Application:** Complete and submit the loan request with instant submission confirmation.
 6. **Admin Review:** Track the application's `Pending` status while an administrator reviews the details.
-7. **Decision:** View the final `Approved` or `Rejected` decision along with clear next steps[cite: 1, 4].
+7. **Decision:** View the final `Approved` or `Rejected` decision along with clear next steps.
 
 ---
 
 ## How to Use It
 
 ### Clients
-1. Open the application link <> and click **Get Started**.
+1. Open the application link <>.
 2. Sign up for a new account or log in to an existing one.
 3. Enter your income, expenses, and loan details—LOANLY handles all calculations and tracks your application statuses automatically.
 
@@ -47,8 +47,9 @@ LOANLY is a simple, all-in-one web app that takes the math out of managing your 
 
 ## Tech Stack
 
-* **Frontend & Backend:** Next.js
-* **Styling:** Tailwind CSS
+* **Frontend:** HTML, CSS, JavaScript
+* **Backend:** Basic server/API 
 * **Database:** SQLite
 
 ---
+

@@ -1,1 +1,54 @@
-# Loan-Manager
+# LOANLY
+
+LOANLY is a simple, all-in-one web app that takes the math out of managing your money. Clients can see how much they owe, which lenders or companies they owe, and where their income goes without losing time to manual calculations—while admins get a centralized portal to review, approve, or reject loan requests and monitor lending activity.
+
+---
+
+## Features
+
+### For Clients
+* **Financial Overview:** View total active debt, monthly income, monthly expenses, and remaining balance at a glance.
+* **Loan & Lender Tracking:** Keep track of active and requested loans, including lender names, amounts, interest rates, and live status updates (`Pending`, `Approved`, `Rejected`).
+* **Income & Expense Log:** Record income and spending categories so cash flow is calculated automatically without spreadsheets.
+* **Loan Calculator & Application:** Estimate repayments clearly before applying, submit loan requests with confirmation feedback, and track review progress.
+
+### For Admins
+* **Application Queue:** View submitted loan requests alongside applicant details, income, and existing debt.
+* **One-Click Decisions:** Approve or reject applications with clear saved-status feedback that automatically updates the client's view.
+* **Portfolio Overview:** Monitor total loan requests, approved volume, and active borrower records.
+
+---
+
+## User Journey
+
+1. **Awareness:** Visit the homepage to learn what LOANLY offers and click **Get Started**.
+2. **Consideration:** Review the application steps and required details in plain language.
+3. **Registration:** Create an account or log in through a clean, validated form.
+4. **Loan Calculation:** Enter loan amounts and repayment terms to view a clear repayment estimate.
+5. **Application:** Complete and submit the loan request with instant submission confirmation.
+6. **Admin Review:** Track the application's `Pending` status while an administrator reviews the details.
+7. **Decision:** View the final `Approved` or `Rejected` decision along with clear next steps[cite: 1, 4].
+
+---
+
+## How to Use It
+
+### Clients
+1. Open the application link <> and click **Get Started**.
+2. Sign up for a new account or log in to an existing one.
+3. Enter your income, expenses, and loan details—LOANLY handles all calculations and tracks your application statuses automatically.
+
+### Admins
+1. Log in using an authorized admin account.
+2. Open the admin portal to inspect incoming loan applications and borrower profiles.
+3. Click **Approve** or **Reject** to record a decision and update the client's status immediately.
+
+---
+
+## Tech Stack
+
+* **Frontend & Backend:** Next.js
+* **Styling:** Tailwind CSS
+* **Database:** SQLite
+
+---

@@ -12,7 +12,7 @@
   />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body class="bg-light">
   <header>
     <nav class="navbar navbar-expand-md bg-white border-bottom">
       <div class="container">
@@ -149,36 +149,44 @@
       </div>
     </section>
 
-    <section id="features" class="features-section">
-      <div class="container">
-        <h2 class="section-title">Built for clients and admins</h2>
-        <p class="section-subtitle">Everyone gets the view they need, with the math done for them.</p>
-        <div class="features">
-          <div class="card">
-            <h3>For clients</h3>
-            <ul>
-              <li><strong>Financial overview:</strong> total debt, monthly income, expenses and remaining balance at a glance.</li>
-              <li><strong>Loan and lender tracking:</strong> lenders, amounts, interest rates and live status.</li>
-              <li><strong>Income and expense log:</strong> cash flow calculated automatically.</li>
-              <li><strong>Calculator and application:</strong> estimate repayments, apply and track your request.</li>
-            </ul>
+    <section id="features" class="pb-5">
+      <div class="container pb-md-4">
+        <h2 class="text-center fw-bold mb-2">Built for clients and admins</h2>
+        <p class="text-center text-secondary mb-5">Everyone gets the view they need, with the math done for them.</p>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body p-4">
+                <h3 class="h5 fw-bold text-primary mb-3">For clients</h3>
+                <ul class="check-list list-unstyled mb-0">
+                  <li><strong>Financial overview:</strong> total debt, monthly income, expenses and remaining balance at a glance.</li>
+                  <li><strong>Loan and lender tracking:</strong> lenders, amounts, interest rates and live status.</li>
+                  <li><strong>Income and expense log:</strong> cash flow calculated automatically.</li>
+                  <li><strong>Calculator and application:</strong> estimate repayments, apply and track your request.</li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <div class="card">
-            <h3>For admins</h3>
-            <ul>
-              <li><strong>Application queue:</strong> requests with applicant income and existing debt.</li>
-              <li><strong>One-click decisions:</strong> approve or reject and the client's view updates.</li>
-              <li><strong>Portfolio overview:</strong> total requests, approved volume and active borrowers.</li>
-            </ul>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body p-4">
+                <h3 class="h5 fw-bold text-primary mb-3">For admins</h3>
+                <ul class="check-list list-unstyled mb-0">
+                  <li><strong>Application queue:</strong> requests with applicant income and existing debt.</li>
+                  <li><strong>One-click decisions:</strong> approve or reject and the client's view updates.</li>
+                  <li><strong>Portfolio overview:</strong> total requests, approved volume and active borrowers.</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer id="contact" class="footer">
+  <footer id="contact" class="border-top py-4 text-center text-secondary">
     <div class="container">
-      <p>&copy; <span id="year"></span> LOANLY</p>
+      <p class="mb-0">&copy; <span id="year"></span> LOANLY</p>
     </div>
   </footer>
 

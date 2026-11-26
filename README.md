@@ -90,9 +90,59 @@ The interface is based on the UX maps for the project: user journey map, persona
 
 ## Tech Stack
 
-* **Frontend:** HTML, CSS, JavaScript
+* **Frontend:** HTML, CSS, JavaScript, [Bootstrap 5](https://getbootstrap.com/) and [Bootstrap Icons](https://icons.getbootstrap.com/) (via CDN)
 * **Backend:** Basic server/API 
-* **Database:** JSON 
+* **Database:** JSON
 
 ---
 
+## Project Structure
+
+```
+frontend/
+├── index.html                 # Landing page
+├── login.html                 # Log in
+├── register.html              # Sign up
+├── dashboard.html             # Client: financial overview
+├── loans.html                 # Client: loans and lenders
+├── finances.html              # Client: income and expense log
+├── apply.html                 # Client: loan application form
+├── apply-review.html          # Client: review before submitting
+├── application.html           # Client: application status and decision
+├── admin.html                 # Admin: portfolio overview and application queue
+├── admin-application.html     # Admin: review and decide an application
+├── admin-borrowers.html       # Admin: borrower records
+├── css/
+│   ├── styles.css             # Brand colors and landing styles
+│   └── app.css                # Shared styles for client and admin pages
+├── js/
+│   └── main.js                # Landing page calculator and navbar
+└── img/
+    └── hero.svg
+docs/
+├── screenshots/               # App screenshots used in this README
+└── ux/                        # UX maps (PDF and page previews)
+```
+
+---
+
+## Running Locally
+
+No build step is needed. Serve the `frontend` folder with any static server:
+
+```bash
+cd frontend
+python -m http.server 8000
+```
+
+Then open http://localhost:8000. The admin portal is at http://localhost:8000/admin.html.
+
+---
+
+## Notes for Development
+
+The app pages are **UI only**: the data shown is placeholder data (personas Alex Johnson and Morgan Lee) and no logic is connected yet.
+
+* Every form field has a `name` attribute and forms use `action="#"`, ready to be connected to the API.
+* Validation messages are already in the HTML (`.invalid-feedback`). Add the `was-validated` class to a form to show them ([Bootstrap validation](https://getbootstrap.com/docs/5.3/forms/validation/)).
+* Still to do with JavaScript: password confirmation match, loan estimate on `apply.html`, filters and search, and loading real data from the backend.

@@ -4,6 +4,33 @@ LOANLY is a simple, all-in-one web app that takes the math out of managing your 
 
 ---
 
+## Screenshots
+
+### Landing page
+![Landing page](docs/screenshots/landing.png)
+
+### Client
+| Dashboard | Apply for a loan |
+|---|---|
+| ![Client dashboard](docs/screenshots/dashboard.png) | ![Loan application form](docs/screenshots/apply.png) |
+| **Application status** | **My loans** |
+| ![Application status](docs/screenshots/application-status.png) | ![My loans](docs/screenshots/loans.png) |
+
+### Admin
+| Application queue | Review an application |
+|---|---|
+| ![Admin overview and application queue](docs/screenshots/admin-overview.png) | ![Admin application review](docs/screenshots/admin-review.png) |
+
+### Mobile
+<p>
+  <img src="docs/screenshots/mobile-landing.png" alt="Landing page on mobile" width="260" />
+  <img src="docs/screenshots/mobile-dashboard.png" alt="Client dashboard on mobile" width="260" />
+</p>
+
+More screenshots in [`docs/screenshots`](docs/screenshots).
+
+---
+
 ## Features
 
 ### For Clients
@@ -28,6 +55,22 @@ LOANLY is a simple, all-in-one web app that takes the math out of managing your 
 5. **Application:** Complete and submit the loan request with instant submission confirmation.
 6. **Admin Review:** Track the application's `Pending` status while an administrator reviews the details.
 7. **Decision:** View the final `Approved` or `Rejected` decision along with clear next steps.
+
+---
+
+## UX Research
+
+The interface is based on the UX maps for the project: user journey map, personas and emotional journey map.
+
+📄 **Full document:** [Loan_Manager_UX_Maps.pdf](docs/ux/Loan_Manager_UX_Maps.pdf)
+
+| User journey map | Emotional journey map |
+|---|---|
+| ![User journey map](docs/ux/1-user-journey-map.png) | ![Emotional journey map](docs/ux/4-emotional-journey-map.png) |
+| **Persona: applicant (Alex Johnson)** | **Persona: administrator (Morgan Lee)** |
+| ![Applicant persona](docs/ux/2-persona-applicant.png) | ![Administrator persona](docs/ux/3-persona-admin.png) |
+
+> **Main insight:** the hardest moment for the applicant is waiting while the admin reviews the request. The app shows a visible `Pending` status and explains what happens next, without promising a decision time.
 
 ---
 

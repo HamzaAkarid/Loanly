@@ -13,17 +13,32 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <header class="navbar">
-    <div class="container nav-content">
-      <a href="#" class="logo">LOAN<span>LY</span></a>
-      <nav>
-        <a href="#journey">How it works</a>
-        <a href="#calculator">Calculator</a>
-        <a href="#features">Features</a>
-        <a href="#contact">Contact</a>
-        <a href="#" class="btn btn-small">Log in</a>
-      </nav>
-    </div>
+  <header>
+    <nav class="navbar navbar-expand-md bg-white border-bottom">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">LOAN<span>LY</span></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#main-nav"
+          aria-controls="main-nav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="main-nav">
+          <ul class="navbar-nav ms-auto align-items-md-center gap-md-2">
+            <li class="nav-item"><a class="nav-link" href="#journey">How it works</a></li>
+            <li class="nav-item"><a class="nav-link" href="#calculator">Calculator</a></li>
+            <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            <li class="nav-item ms-md-2"><a class="btn btn-primary px-3" href="#">Log in</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   </header>
 
   <main>

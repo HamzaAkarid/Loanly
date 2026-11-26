@@ -49,7 +49,7 @@ LOANLY is a simple, all-in-one web app that takes the math out of managing your 
 
 * **Frontend:** HTML, CSS, JavaScript
 * **Backend:** Basic server/API 
-* **Database:** SQLite
+* **Database:** JSON 
 
 ---
 

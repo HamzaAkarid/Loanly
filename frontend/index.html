@@ -12,6 +12,7 @@
       <a href="#" class="logo">Loan<span>Manager</span></a>
       <nav>
         <a href="#journey">How it works</a>
+        <a href="#calculator">Calculator</a>
         <a href="#" class="btn btn-small">Log in</a>
       </nav>
     </div>
@@ -57,6 +58,35 @@
             <p>Once the balance hits zero, the loan is marked as paid and archived.</p>
           </li>
         </ol>
+      </div>
+    </section>
+
+    <section id="calculator" class="calculator">
+      <div class="container">
+        <h2 class="section-title">Calculate your loan</h2>
+        <p class="section-subtitle">Get an estimate of your monthly payment in seconds.</p>
+        <div class="calc-grid">
+          <form class="calc-form" id="calc-form">
+            <label>
+              Loan amount ($)
+              <input type="number" id="amount" min="0" step="100" value="10000" required />
+            </label>
+            <label>
+              Annual interest rate (%)
+              <input type="number" id="rate" min="0" step="0.1" value="12" required />
+            </label>
+            <label>
+              Term (months)
+              <input type="number" id="months" min="1" step="1" value="12" required />
+            </label>
+          </form>
+          <div class="calc-result">
+            <p class="result-label">Monthly payment</p>
+            <p class="result-main" id="monthly">$0.00</p>
+            <div class="result-row"><span>Total interest</span><strong id="interest">$0.00</strong></div>
+            <div class="result-row"><span>Total to pay</span><strong id="total">$0.00</strong></div>
+          </div>
+        </div>
       </div>
     </section>
   </main>

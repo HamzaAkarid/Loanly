@@ -27,3 +27,11 @@ function calculateLoan() {
 
 document.getElementById("calc-form").addEventListener("input", calculateLoan);
 calculateLoan();
+
+// Close the mobile menu after picking a section
+document.querySelectorAll("#main-nav .nav-link").forEach((link) => {
+  link.addEventListener("click", () => {
+    const menu = bootstrap.Collapse.getInstance(document.getElementById("main-nav"));
+    if (menu) menu.hide();
+  });
+});

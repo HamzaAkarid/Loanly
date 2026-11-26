@@ -4,142 +4,197 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LOANLY</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
-  <header class="navbar">
-    <div class="container nav-content">
-      <a href="#" class="logo">LOAN<span>LY</span></a>
-      <nav>
-        <a href="#journey">How it works</a>
-        <a href="#calculator">Calculator</a>
-        <a href="#features">Features</a>
-        <a href="#contact">Contact</a>
-        <a href="#" class="btn btn-small">Log in</a>
-      </nav>
-    </div>
+<body class="bg-light">
+  <header>
+    <nav class="navbar navbar-expand-md bg-white border-bottom">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">LOAN<span>LY</span></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#main-nav"
+          aria-controls="main-nav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="main-nav">
+          <ul class="navbar-nav ms-auto align-items-md-center gap-md-2">
+            <li class="nav-item"><a class="nav-link" href="#journey">How it works</a></li>
+            <li class="nav-item"><a class="nav-link" href="#calculator">Calculator</a></li>
+            <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            <li class="nav-item ms-md-2"><a class="btn btn-primary px-3" href="#">Log in</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-text">
-          <h1>Take the math out of managing your money</h1>
-          <p>See how much you owe, who you owe it to and where your income goes, without spreadsheets or manual calculations.</p>
-          <a href="#journey" class="btn" id="cta">Get started</a>
-        </div>
-        <div class="hero-image">
-          <img src="img/hero.svg" alt="LOANLY dashboard preview" />
+    <section class="py-5">
+      <div class="container py-md-5">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-6 text-center text-lg-start">
+            <h1 class="display-5 fw-bold mb-3">Take the math out of managing your money</h1>
+            <p class="lead text-secondary mb-4">
+              See how much you owe, who you owe it to and where your income goes, without spreadsheets or manual calculations.
+            </p>
+            <a href="#journey" class="btn btn-primary btn-lg px-4" id="cta">Get started</a>
+          </div>
+          <div class="col-lg-6">
+            <img src="img/hero.svg" class="img-fluid" alt="LOANLY dashboard preview" />
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="journey" class="journey">
-      <div class="container">
-        <h2 class="section-title">How it works</h2>
-        <p class="section-subtitle">From your first visit to the final decision, in seven steps.</p>
-        <ol class="steps">
-          <li class="step">
+    <section id="journey" class="py-5 bg-white border-top border-bottom">
+      <div class="container py-md-4">
+        <h2 class="text-center fw-bold mb-2">How it works</h2>
+        <p class="text-center text-secondary mb-5">From your first visit to the final decision, in seven steps.</p>
+        <ol class="steps list-unstyled row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 text-center mb-0">
+          <li class="col step">
             <span class="step-number">1</span>
-            <h3>Discover</h3>
-            <p>Learn what LOANLY offers and click Get Started.</p>
+            <h3 class="h6 fw-bold">Discover</h3>
+            <p class="small text-secondary mb-0">Learn what LOANLY offers and click Get Started.</p>
           </li>
-          <li class="step">
+          <li class="col step">
             <span class="step-number">2</span>
-            <h3>Review</h3>
-            <p>See the application steps and required details in plain language.</p>
+            <h3 class="h6 fw-bold">Review</h3>
+            <p class="small text-secondary mb-0">See the application steps and required details in plain language.</p>
           </li>
-          <li class="step">
+          <li class="col step">
             <span class="step-number">3</span>
-            <h3>Sign up</h3>
-            <p>Create an account or log in with a simple, validated form.</p>
+            <h3 class="h6 fw-bold">Sign up</h3>
+            <p class="small text-secondary mb-0">Create an account or log in with a simple, validated form.</p>
           </li>
-          <li class="step">
+          <li class="col step">
             <span class="step-number">4</span>
-            <h3>Calculate</h3>
-            <p>Enter an amount and term to get a clear repayment estimate.</p>
+            <h3 class="h6 fw-bold">Calculate</h3>
+            <p class="small text-secondary mb-0">Enter an amount and term to get a clear repayment estimate.</p>
           </li>
-          <li class="step">
+          <li class="col step">
             <span class="step-number">5</span>
-            <h3>Apply</h3>
-            <p>Submit your loan request and get instant confirmation.</p>
+            <h3 class="h6 fw-bold">Apply</h3>
+            <p class="small text-secondary mb-0">Submit your loan request and get instant confirmation.</p>
           </li>
-          <li class="step">
+          <li class="col step">
             <span class="step-number">6</span>
-            <h3>Admin review</h3>
-            <p>Your application stays Pending while an admin reviews it.</p>
+            <h3 class="h6 fw-bold">Admin review</h3>
+            <p class="small text-secondary mb-0">Your application stays Pending while an admin reviews it.</p>
           </li>
-          <li class="step">
+          <li class="col step">
             <span class="step-number">7</span>
-            <h3>Decision</h3>
-            <p>See if it was Approved or Rejected, with clear next steps.</p>
+            <h3 class="h6 fw-bold">Decision</h3>
+            <p class="small text-secondary mb-0">See if it was Approved or Rejected, with clear next steps.</p>
           </li>
         </ol>
       </div>
     </section>
 
-    <section id="calculator" class="calculator">
-      <div class="container">
-        <h2 class="section-title">Calculate your loan</h2>
-        <p class="section-subtitle">Get an estimate of your monthly payment in seconds.</p>
-        <div class="calc-grid">
-          <form class="calc-form" id="calc-form">
-            <label>
-              Loan amount ($)
-              <input type="number" id="amount" min="0" step="100" value="10000" required />
-            </label>
-            <label>
-              Annual interest rate (%)
-              <input type="number" id="rate" min="0" step="0.1" value="12" required />
-            </label>
-            <label>
-              Term (months)
-              <input type="number" id="months" min="1" step="1" value="12" required />
-            </label>
-          </form>
-          <div class="calc-result">
-            <p class="result-label">Monthly payment</p>
-            <p class="result-main" id="monthly">$0.00</p>
-            <div class="result-row"><span>Total interest</span><strong id="interest">$0.00</strong></div>
-            <div class="result-row"><span>Total to pay</span><strong id="total">$0.00</strong></div>
+    <section id="calculator" class="py-5">
+      <div class="container py-md-4">
+        <h2 class="text-center fw-bold mb-2">Calculate your loan</h2>
+        <p class="text-center text-secondary mb-5">Get an estimate of your monthly payment in seconds.</p>
+        <div class="row g-4 justify-content-center">
+          <div class="col-md-6 col-lg-5">
+            <form class="card card-body p-4 h-100" id="calc-form">
+              <div class="mb-3">
+                <label for="amount" class="form-label fw-semibold">Loan amount</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="amount" min="0" step="100" value="10000" required />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="rate" class="form-label fw-semibold">Annual interest rate</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" id="rate" min="0" step="0.1" value="12" required />
+                  <span class="input-group-text">%</span>
+                </div>
+              </div>
+              <div>
+                <label for="months" class="form-label fw-semibold">Term</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" id="months" min="1" step="1" value="12" required />
+                  <span class="input-group-text">months</span>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-6 col-lg-5">
+            <div class="card h-100 bg-primary text-white border-0 p-4 justify-content-center">
+              <p class="mb-1 opacity-75">Monthly payment</p>
+              <p class="display-6 fw-bold mb-4" id="monthly">$0.00</p>
+              <div class="d-flex justify-content-between py-2 border-top border-white border-opacity-25">
+                <span>Total interest</span><strong id="interest">$0.00</strong>
+              </div>
+              <div class="d-flex justify-content-between py-2 border-top border-white border-opacity-25">
+                <span>Total to pay</span><strong id="total">$0.00</strong>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="features" class="features-section">
-      <div class="container">
-        <h2 class="section-title">Built for clients and admins</h2>
-        <p class="section-subtitle">Everyone gets the view they need, with the math done for them.</p>
-        <div class="features">
-          <div class="card">
-            <h3>For clients</h3>
-            <ul>
-              <li><strong>Financial overview:</strong> total debt, monthly income, expenses and remaining balance at a glance.</li>
-              <li><strong>Loan and lender tracking:</strong> lenders, amounts, interest rates and live status.</li>
-              <li><strong>Income and expense log:</strong> cash flow calculated automatically.</li>
-              <li><strong>Calculator and application:</strong> estimate repayments, apply and track your request.</li>
-            </ul>
+    <section id="features" class="pb-5">
+      <div class="container pb-md-4">
+        <h2 class="text-center fw-bold mb-2">Built for clients and admins</h2>
+        <p class="text-center text-secondary mb-5">Everyone gets the view they need, with the math done for them.</p>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body p-4">
+                <h3 class="h5 fw-bold text-primary mb-3">For clients</h3>
+                <ul class="check-list list-unstyled mb-0">
+                  <li><strong>Financial overview:</strong> total debt, monthly income, expenses and remaining balance at a glance.</li>
+                  <li><strong>Loan and lender tracking:</strong> lenders, amounts, interest rates and live status.</li>
+                  <li><strong>Income and expense log:</strong> cash flow calculated automatically.</li>
+                  <li><strong>Calculator and application:</strong> estimate repayments, apply and track your request.</li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <div class="card">
-            <h3>For admins</h3>
-            <ul>
-              <li><strong>Application queue:</strong> requests with applicant income and existing debt.</li>
-              <li><strong>One-click decisions:</strong> approve or reject and the client's view updates.</li>
-              <li><strong>Portfolio overview:</strong> total requests, approved volume and active borrowers.</li>
-            </ul>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body p-4">
+                <h3 class="h5 fw-bold text-primary mb-3">For admins</h3>
+                <ul class="check-list list-unstyled mb-0">
+                  <li><strong>Application queue:</strong> requests with applicant income and existing debt.</li>
+                  <li><strong>One-click decisions:</strong> approve or reject and the client's view updates.</li>
+                  <li><strong>Portfolio overview:</strong> total requests, approved volume and active borrowers.</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer id="contact" class="footer">
+  <footer id="contact" class="border-top py-4 text-center text-secondary">
     <div class="container">
-      <p>&copy; <span id="year"></span> LOANLY</p>
+      <p class="mb-0">&copy; <span id="year"></span> LOANLY</p>
     </div>
   </footer>
 
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
   <script src="js/main.js"></script>
 </body>
 </html>

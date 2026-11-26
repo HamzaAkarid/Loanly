@@ -63,7 +63,6 @@ More screenshots in [`docs/screenshots`](docs/screenshots).
 The interface is based on the UX maps for the project: user journey map, personas and emotional journey map.
 
 📄 **Full document:** [Loan_Manager_UX_Maps.pdf](docs/ux/Loan_Manager_UX_Maps.pdf)
-
 | User journey map | Emotional journey map |
 |---|---|
 | ![User journey map](docs/ux/1-user-journey-map.png) | ![Emotional journey map](docs/ux/4-emotional-journey-map.png) |
@@ -123,26 +122,3 @@ docs/
 ├── screenshots/               # App screenshots used in this README
 └── ux/                        # UX maps (PDF and page previews)
 ```
-
----
-
-## Running Locally
-
-No build step is needed. Serve the `frontend` folder with any static server:
-
-```bash
-cd frontend
-python -m http.server 8000
-```
-
-Then open http://localhost:8000. The admin portal is at http://localhost:8000/admin.html.
-
----
-
-## Notes for Development
-
-The app pages are **UI only**: the data shown is placeholder data (personas Alex Johnson and Morgan Lee) and no logic is connected yet.
-
-* Every form field has a `name` attribute and forms use `action="#"`, ready to be connected to the API.
-* Validation messages are already in the HTML (`.invalid-feedback`). Add the `was-validated` class to a form to show them ([Bootstrap validation](https://getbootstrap.com/docs/5.3/forms/validation/)).
-* Still to do with JavaScript: password confirmation match, loan estimate on `apply.html`, filters and search, and loading real data from the backend.

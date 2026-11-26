@@ -76,7 +76,7 @@ The interface is based on the UX maps for the project: user journey map, persona
 ## How to Use It
 
 ### Clients
-1. Open the application link <>.
+1. Open the application link <https://loanly-frontend-xi.vercel.app>.
 2. Sign up for a new account or log in to an existing one.
 3. Enter your income, expenses, and loan details—LOANLY handles all calculations and tracks your application statuses automatically.
 

@@ -92,6 +92,22 @@ nav a:hover { color: var(--text); }
 .step h3 { margin-bottom: 0.5rem; }
 .step p { color: var(--muted); font-size: 0.95rem; }
 
+/* Features */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  padding-bottom: 4rem;
+}
+.card {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+.card h3 { margin-bottom: 0.5rem; color: var(--primary); }
+.card p { color: var(--muted); }
+
 /* Calculator */
 .calculator { padding: 1rem 0 5rem; }
 .calc-grid {

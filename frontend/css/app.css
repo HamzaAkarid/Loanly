@@ -1,0 +1,60 @@
+/* Shared styles for the app pages (client and admin) */
+
+/* Auth pages */
+.auth-card { max-width: 440px; width: 100%; }
+
+/* Stat cards */
+.stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  font-size: 1.25rem;
+}
+
+/* Status badges */
+.status-badge { font-weight: 600; min-width: 76px; }
+
+/* Tables inside cards */
+.card .table { margin-bottom: 0; }
+.card .table th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  font-weight: 600;
+}
+
+/* Application status timeline */
+.timeline { list-style: none; padding-left: 0; margin: 0; }
+.timeline li { position: relative; padding: 0 0 1.75rem 2.5rem; }
+.timeline li:last-child { padding-bottom: 0; }
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 28px;
+  bottom: 0;
+  width: 2px;
+  background: var(--bs-border-color);
+}
+.timeline li:last-child::before { display: none; }
+.timeline .dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  background: var(--bs-secondary-bg);
+  color: var(--bs-secondary-color);
+}
+.timeline .done .dot { background: var(--bs-success); color: #fff; }
+.timeline .current .dot { background: var(--bs-warning); color: #000; }

@@ -1,3 +1,10 @@
+document.getElementById("year").textContent = new Date().getFullYear();
+
+document.getElementById("cta").addEventListener("click", (e) => {
+  e.preventDefault();
+  document.getElementById("journey").scrollIntoView({ behavior: "smooth" });
+});
+
 // Loan calculator (fixed monthly payment, amortized)
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 

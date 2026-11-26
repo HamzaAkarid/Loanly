@@ -1,3 +1,5 @@
+document.getElementById("year").textContent = new Date().getFullYear();
+
 // Loan calculator (fixed monthly payment, amortized)
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 

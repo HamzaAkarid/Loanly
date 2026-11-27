@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
-<body class="app bg-light">
+<body class="app bg-light" data-page="loans">
   <nav class="navbar navbar-expand-lg bg-white border-bottom">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">LOAN<span>LY</span></a>
@@ -44,12 +44,12 @@
         </ul>
         <div class="dropdown">
           <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle me-1"></i>Alex Johnson
+            <i class="bi bi-person-circle me-1"></i><span id="nav-user-name">Alex Johnson</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="#">Profile</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="login.html">Log out</a></li>
+            <li><a class="dropdown-item js-logout" href="login.html">Log out</a></li>
           </ul>
         </div>
       </div>
@@ -65,12 +65,12 @@
       <a href="apply.html" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>New application</a>
     </div>
 
-    <ul class="nav nav-pills mb-3">
-      <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">All</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Active</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Pending</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Approved</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">Rejected</a></li>
+    <ul class="nav nav-pills mb-3" id="loan-filters">
+      <li class="nav-item"><button type="button" class="nav-link active" data-status="All" aria-current="page">All</button></li>
+      <li class="nav-item"><button type="button" class="nav-link" data-status="Active">Active</button></li>
+      <li class="nav-item"><button type="button" class="nav-link" data-status="Pending">Pending</button></li>
+      <li class="nav-item"><button type="button" class="nav-link" data-status="Approved">Approved</button></li>
+      <li class="nav-item"><button type="button" class="nav-link" data-status="Rejected">Rejected</button></li>
     </ul>
 
     <div class="card">
@@ -79,7 +79,7 @@
           <thead>
             <tr><th>Lender</th><th>Amount</th><th>Interest rate</th><th>Term</th><th>Balance</th><th>Status</th></tr>
           </thead>
-          <tbody>
+          <tbody id="loan-rows">
             <tr>
               <td class="fw-semibold">Northwind Bank</td>
               <td>$12,000</td>
@@ -139,5 +139,7 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+  <script src="js/store.js"></script>
+  <script src="js/pages.js"></script>
 </body>
 </html>

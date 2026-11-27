@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
-<body class="app bg-light">
+<body class="app bg-light" data-page="apply">
   <nav class="navbar navbar-expand-lg bg-white border-bottom">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">LOAN<span>LY</span></a>
@@ -44,12 +44,12 @@
         </ul>
         <div class="dropdown">
           <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle me-1"></i>Alex Johnson
+            <i class="bi bi-person-circle me-1"></i><span id="nav-user-name">Alex Johnson</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="#">Profile</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="login.html">Log out</a></li>
+            <li><a class="dropdown-item js-logout" href="login.html">Log out</a></li>
           </ul>
         </div>
       </div>
@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <form action="apply-review.html" method="post" class="row g-4" novalidate>
+    <form id="apply-form" action="#" method="post" class="row g-4" novalidate>
       <div class="col-lg-8">
         <div class="card mb-4">
           <div class="card-header bg-white py-3">
@@ -160,16 +160,16 @@
         <div class="card bg-primary text-white border-0 sticky-lg-top" style="top: 1.5rem">
           <div class="card-body p-4">
             <p class="mb-1 opacity-75">Estimated monthly payment</p>
-            <p class="display-6 fw-bold mb-1">$444.24</p>
+            <p class="display-6 fw-bold mb-1" id="estimate-monthly">$444.24</p>
             <p class="small opacity-75 mb-4">Based on a 12% annual rate. Final terms are confirmed after review.</p>
             <div class="d-flex justify-content-between py-2 border-top border-white border-opacity-25">
-              <span>Loan amount</span><strong>$5,000.00</strong>
+              <span>Loan amount</span><strong id="estimate-amount">$5,000.00</strong>
             </div>
             <div class="d-flex justify-content-between py-2 border-top border-white border-opacity-25">
-              <span>Total interest</span><strong>$330.93</strong>
+              <span>Total interest</span><strong id="estimate-interest">$330.93</strong>
             </div>
             <div class="d-flex justify-content-between py-2 border-top border-white border-opacity-25 mb-4">
-              <span>Total to pay</span><strong>$5,330.93</strong>
+              <span>Total to pay</span><strong id="estimate-total">$5,330.93</strong>
             </div>
             <button type="submit" class="btn btn-light w-100 fw-semibold">Continue to review</button>
             <p class="small opacity-75 text-center mt-3 mb-0">You can check everything before sending.</p>
@@ -184,5 +184,7 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+  <script src="js/store.js"></script>
+  <script src="js/pages.js"></script>
 </body>
 </html>

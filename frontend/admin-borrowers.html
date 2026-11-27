@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
-<body class="app bg-light">
+<body class="app bg-light" data-page="admin-borrowers">
   <nav class="navbar navbar-expand-lg bg-white border-bottom">
     <div class="container">
       <a class="navbar-brand fw-bold" href="admin.html">LOAN<span>LY</span> <span class="badge text-bg-dark fs-6 align-middle ms-1">Admin</span></a>
@@ -42,12 +42,12 @@
         </ul>
         <div class="dropdown">
           <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle me-1"></i>Morgan Lee
+            <i class="bi bi-person-circle me-1"></i><span id="nav-user-name">Morgan Lee</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="#">Profile</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="login.html">Log out</a></li>
+            <li><a class="dropdown-item js-logout" href="login.html">Log out</a></li>
           </ul>
         </div>
       </div>
@@ -60,19 +60,19 @@
         <h1 class="h3 fw-bold mb-1">Borrowers</h1>
         <p class="text-secondary mb-0">Active borrower records and their current debt.</p>
       </div>
-      <span class="badge text-bg-light border fs-6">74 active borrowers</span>
+      <span class="badge text-bg-light border fs-6" id="borrower-count">74 active borrowers</span>
     </div>
 
     <div class="card">
       <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2 py-3">
         <h2 class="h6 fw-bold mb-0">All borrowers</h2>
-        <form class="d-flex gap-2" role="search" action="#">
-          <input class="form-control form-control-sm" type="search" name="q" placeholder="Search by name or email" aria-label="Search borrowers" />
-          <select class="form-select form-select-sm" name="status" aria-label="Filter by status">
-            <option>All</option>
-            <option>Up to date</option>
-            <option>Payment late</option>
-            <option>Pending application</option>
+        <form class="d-flex gap-2" id="borrower-form" role="search" action="#">
+          <input class="form-control form-control-sm" id="borrower-search" type="search" name="q" placeholder="Search by name or email" aria-label="Search borrowers" />
+          <select class="form-select form-select-sm" id="borrower-status" name="status" aria-label="Filter by status">
+            <option value="All">All</option>
+            <option value="Up to date">Up to date</option>
+            <option value="Payment late">Payment late</option>
+            <option value="Pending application">Pending application</option>
           </select>
         </form>
       </div>
@@ -81,7 +81,7 @@
           <thead>
             <tr><th>Borrower</th><th>Loans</th><th>Total debt</th><th>Monthly income</th><th>Customer since</th><th>Status</th><th class="text-end">Profile</th></tr>
           </thead>
-          <tbody>
+          <tbody id="borrower-rows">
           <tr>
             <td>
               <span class="fw-semibold d-block">Alex Johnson</span>
@@ -157,17 +157,8 @@
           </tbody>
         </table>
       </div>
-      <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3">
-        <span class="small text-secondary">Showing 6 of 74</span>
-        <nav aria-label="Borrowers pages">
-          <ul class="pagination pagination-sm mb-0">
-            <li class="page-item disabled"><span class="page-link">Previous</span></li>
-            <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-          </ul>
-        </nav>
+      <div class="card-footer bg-white py-3">
+        <span class="small text-secondary" id="borrower-shown">Showing 6 of 74</span>
       </div>
     </div>
   </main>
@@ -177,5 +168,7 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+  <script src="js/store.js"></script>
+  <script src="js/pages.js"></script>
 </body>
 </html>

@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
-<body class="app bg-light">
+<body class="app bg-light" data-page="application">
   <nav class="navbar navbar-expand-lg bg-white border-bottom">
     <div class="container">
       <a class="navbar-brand fw-bold" href="dashboard.html">LOAN<span>LY</span></a>
@@ -44,12 +44,12 @@
         </ul>
         <div class="dropdown">
           <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle me-1"></i>Alex Johnson
+            <i class="bi bi-person-circle me-1"></i><span id="nav-user-name">Alex Johnson</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="#">Profile</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="login.html">Log out</a></li>
+            <li><a class="dropdown-item js-logout" href="login.html">Log out</a></li>
           </ul>
         </div>
       </div>
@@ -57,17 +57,25 @@
   </nav>
 
   <main class="container py-4 py-lg-5">
-    <div class="alert alert-success d-flex align-items-center gap-2" role="alert">
-      <i class="bi bi-check-circle-fill"></i>
-      <div><strong>Application submitted.</strong> We received your request and sent it to review. You can come back to this page anytime to check its status.</div>
+    <div id="application-empty" class="d-none">
+      <h1 class="h3 fw-bold mb-2">No application yet</h1>
+      <p class="text-secondary mb-4">When you submit a loan request, its status will show up here.</p>
+      <a href="apply.html" class="btn btn-primary">Apply for a loan</a>
+    </div>
+    <div id="application-has">
+    <div class="alert alert-success" role="alert" id="submitted-alert">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-check-circle-fill"></i>
+        <div><strong>Application submitted.</strong> We received your request and sent it to review. You can come back to this page anytime to check its status.</div>
+      </div>
     </div>
 
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
       <div>
-        <h1 class="h3 fw-bold mb-1">Application #LN-1042</h1>
-        <p class="text-secondary mb-0">Submitted on Nov 26, 2026</p>
+        <h1 class="h3 fw-bold mb-1" id="app-title">Application #LN-1042</h1>
+        <p class="text-secondary mb-0" id="app-subtitle">Submitted on Nov 26, 2026</p>
       </div>
-      <span class="badge status-badge text-bg-warning">Pending</span>
+      <span class="badge status-badge text-bg-warning" id="app-status">Pending</span>
     </div>
 
     <div class="row g-4">
@@ -77,7 +85,7 @@
             <h2 class="h6 fw-bold mb-0">Progress</h2>
           </div>
           <div class="card-body">
-            <ol class="timeline">
+            <ol class="timeline" id="timeline">
               <li class="done">
                 <span class="dot"><i class="bi bi-check-lg"></i></span>
                 <p class="fw-semibold mb-0">Application submitted</p>
@@ -103,33 +111,34 @@
             <h2 class="h6 fw-bold mb-0">Request summary</h2>
           </div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Amount</span><strong>$5,000.00</strong></li>
-            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Term</span><strong>12 months</strong></li>
-            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Purpose</span><strong>Debt consolidation</strong></li>
-            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Est. monthly payment</span><strong>$444.24</strong></li>
-            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Status</span><span class="badge status-badge text-bg-warning">Pending</span></li>
+            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Amount</span><strong id="sum-amount">$5,000.00</strong></li>
+            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Term</span><strong id="sum-term">12 months</strong></li>
+            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Purpose</span><strong id="sum-purpose">Debt consolidation</strong></li>
+            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Est. monthly payment</span><strong id="sum-payment">$444.24</strong></li>
+            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Status</span><span class="badge status-badge text-bg-warning" id="sum-status">Pending</span></li>
           </ul>
         </div>
       </div>
     </div>
 
-    <h2 class="h5 fw-bold mt-5 mb-3">Possible decisions</h2>
-    <p class="text-secondary">Preview of how the decision will look once an admin reviews the application.</p>
+    <h2 class="h5 fw-bold mt-5 mb-3" id="outcome-heading">Possible decisions</h2>
+    <p class="text-secondary" id="outcome-intro">Preview of how the decision will look once an admin reviews the application.</p>
     <div class="row g-4">
-      <div class="col-md-6">
+      <div class="col-md-6" id="outcome-approved">
         <div class="alert alert-success h-100 mb-0" role="alert">
           <h3 class="h6 fw-bold"><i class="bi bi-check-circle-fill me-1"></i>Your loan was approved</h3>
-          <p class="mb-2">Congratulations! Your loan of $5,000.00 was approved.</p>
-          <p class="small mb-0"><strong>Next step:</strong> you'll receive the funds and see the loan in <a href="loans.html" class="alert-link">My loans</a>. Your first payment of $444.24 is due 30 days later.</p>
+          <p class="mb-2" id="outcome-approved-lead">Congratulations! Your loan of $5,000.00 was approved.</p>
+          <p class="small mb-0" id="outcome-approved-next"><strong>Next step:</strong> you'll receive the funds and see the loan in <a href="loans.html" class="alert-link">My loans</a>. Your first payment of $444.24 is due 30 days later.</p>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6" id="outcome-rejected">
         <div class="alert alert-danger h-100 mb-0" role="alert">
           <h3 class="h6 fw-bold"><i class="bi bi-x-circle-fill me-1"></i>Your loan was not approved</h3>
-          <p class="mb-2">Your current debt is too high compared to your income for this amount.</p>
-          <p class="small mb-0"><strong>Next step:</strong> try a smaller amount or a longer term, or apply again in 30 days.</p>
+          <p class="mb-2" id="outcome-rejected-lead">Your current debt is too high compared to your income for this amount.</p>
+          <p class="small mb-0" id="outcome-rejected-next"><strong>Next step:</strong> try a smaller amount or a longer term, or apply again in 30 days.</p>
         </div>
       </div>
+    </div>
     </div>
   </main>
 
@@ -138,5 +147,7 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+  <script src="js/store.js"></script>
+  <script src="js/pages.js"></script>
 </body>
 </html>

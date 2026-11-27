@@ -19,14 +19,21 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
-<body class="bg-light">
+<body class="bg-light" data-page="login">
   <main class="min-vh-100 d-flex flex-column align-items-center justify-content-center p-3">
     <a class="navbar-brand fw-bold fs-3 mb-4 text-decoration-none text-body" href="index.html">LOAN<span>LY</span></a>
     <div class="card auth-card shadow-sm">
       <div class="card-body p-4 p-sm-5">
         <h1 class="h4 fw-bold mb-1">Welcome back</h1>
         <p class="text-secondary mb-4">Log in to see your loans and finances.</p>
-        <form action="#" method="post" novalidate>
+        <div class="alert alert-light border small">
+          <div class="fw-semibold mb-1">Demo accounts</div>
+          <div>Client: alex.johnson@example.com</div>
+          <div>Admin: morgan.lee@example.com</div>
+          <div class="mb-2 text-secondary">Password for both: loanly123</div>
+          <button type="button" class="btn btn-link btn-sm p-0" id="reset-demo">Reset demo data</button>
+        </div>
+        <form id="login-form" action="#" method="post" novalidate>
   <div class="alert alert-danger d-none" role="alert" id="login-error">
     The email or password is incorrect. Please try again.
   </div>
@@ -62,5 +69,7 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+  <script src="js/store.js"></script>
+  <script src="js/pages.js"></script>
 </body>
 </html>

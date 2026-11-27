@@ -19,14 +19,15 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
-<body class="bg-light">
+<body class="bg-light" data-page="register">
   <main class="min-vh-100 d-flex flex-column align-items-center justify-content-center p-3">
     <a class="navbar-brand fw-bold fs-3 mb-4 text-decoration-none text-body" href="index.html">LOAN<span>LY</span></a>
     <div class="card auth-card shadow-sm">
       <div class="card-body p-4 p-sm-5">
         <h1 class="h4 fw-bold mb-1">Create your account</h1>
         <p class="text-secondary mb-4">It takes less than a minute.</p>
-        <form action="#" method="post" novalidate>
+        <form id="register-form" action="#" method="post" novalidate>
+          <div class="alert alert-danger d-none" role="alert" id="register-error"></div>
           <div class="row g-3 mb-3">
             <div class="col-sm-6">
               <label for="first-name" class="form-label">First name</label>
@@ -75,5 +76,7 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+  <script src="js/store.js"></script>
+  <script src="js/pages.js"></script>
 </body>
 </html>

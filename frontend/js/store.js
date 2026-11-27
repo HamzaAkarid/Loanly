@@ -127,11 +127,15 @@
     return db.users.find((item) => item.id === id) || null;
   }
 
-  function publicUser(user) {
-    if (!user) return null;
-    const copy = Object.assign({}, user);
+  function publicUser(person) {
+    if (!person) return null;
+    const copy = Object.assign({}, person);
     delete copy.password;
     return copy;
+  }
+
+  function sum(list, pick) {
+    return list.reduce((total, item) => total + pick(item), 0);
   }
 
   function money(value, digits) {
@@ -164,7 +168,7 @@
   }
 
   function activeDebt(userId) {
-    return activeLoans(userId).reduce((sum, item) => sum + item.balance, 0);
+    return sum(activeLoans(userId), (item) => item.balance);
   }
 
   function inSameMonth(dateString, ref) {
@@ -179,11 +183,12 @@
 
   function totalsFor(userId) {
     const rows = monthTransactions(userId);
-    const recordedIncome = rows.filter((item) => item.type === "income").reduce((sum, item) => sum + item.amount, 0);
-    const expenses = rows.filter((item) => item.type === "expense").reduce((sum, item) => sum + item.amount, 0);
+    const incomeRows = rows.filter((item) => item.type === "income");
     const person = findUser(userId);
-    const income = rows.some((item) => item.type === "income") ? recordedIncome : (person && person.monthlyIncome) || 0;
-    return { income, expenses, recordedIncome };
+    return {
+      income: incomeRows.length ? sum(incomeRows, (item) => item.amount) : (person && person.monthlyIncome) || 0,
+      expenses: sum(rows.filter((item) => item.type === "expense"), (item) => item.amount),
+    };
   }
 
   function expensesByCategory(userId) {
@@ -202,8 +207,6 @@
 
   function entriesFor(userId) {
     const loans = db.loans.filter((item) => item.userId === userId).map((item) => ({
-      kind: "loan",
-      id: item.id,
       lender: item.lender,
       amount: item.amount,
       rate: item.rate,
@@ -214,8 +217,6 @@
     const apps = db.applications
       .filter((item) => item.userId === userId && (item.status === "Pending" || item.status === "Rejected"))
       .map((item) => ({
-        kind: "application",
-        id: item.id,
         lender: "LOANLY",
         amount: item.amount,
         rate: item.rate,
@@ -237,11 +238,11 @@
     if (pending) status = "Pending application";
     else if (person.paymentStatus === "late") status = "Payment late";
     const loans = activeLoans(person.id);
-    const latest = applicationsSorted().find((item) => item.userId === person.id) || null;
+    const latest = applicationsSorted().find((item) => item.userId === person.id);
     return {
       user: publicUser(person),
       loanCount: loans.length,
-      debt: loans.reduce((sum, item) => sum + item.balance, 0),
+      debt: sum(loans, (item) => item.balance),
       monthlyIncome: totalsFor(person.id).income,
       status,
       latestApplicationId: latest ? latest.id : null,
@@ -331,7 +332,8 @@
       db.transactions.push(row);
       if (row.type === "income") {
         const person = findUser(userId);
-        if (person) person.monthlyIncome = totalsFor(userId).recordedIncome;
+        const incomeRows = monthTransactions(userId).filter((item) => item.type === "income");
+        if (person) person.monthlyIncome = sum(incomeRows, (item) => item.amount);
       }
       save();
       return row;
@@ -436,10 +438,7 @@
 
     portfolio() {
       const pending = db.applications.filter((item) => item.status === "Pending");
-      let oldest = null;
-      pending.forEach((item) => {
-        if (!oldest || item.submittedAt < oldest) oldest = item.submittedAt;
-      });
+      const oldest = pending.map((item) => item.submittedAt).sort()[0];
       let oldestLabel = "None waiting";
       if (oldest) {
         const days = Math.floor((Date.now() - new Date(oldest).getTime()) / 86400000);

@@ -14,7 +14,6 @@
     "Payment late": "text-bg-danger",
     "Pending application": "text-bg-warning",
   };
-
   const SPEND_COLOR = {
     Housing: "bg-primary",
     "Loan payments": "bg-danger",
@@ -23,29 +22,27 @@
     Other: "bg-secondary",
   };
 
-  function $(id) {
-    return document.getElementById(id);
-  }
+  const $ = (id) => document.getElementById(id);
+  const fullName = (user) => (user ? user.firstName + " " + user.lastName : "Unknown");
+  const cents = (value) => L.money(value, 2);
+  const rate = (value) => Number(value).toFixed(1) + "%";
 
   function setText(id, text) {
     const node = $(id);
     if (node) node.textContent = text;
   }
 
+  function texts(map) {
+    Object.keys(map).forEach((id) => setText(id, map[id]));
+  }
+
   function show(id, on) {
     const node = $(id);
-    if (!node) return;
-    /* d-flex is defined after d-none in Bootstrap, and both use !important,
-       so a hidden flex row has to drop d-flex or it stays on screen. */
-    if (node.classList.contains("d-flex") || node.dataset.display === "flex") {
-      node.dataset.display = "flex";
-      node.classList.toggle("d-flex", on);
-    }
-    node.classList.toggle("d-none", !on);
+    if (node) node.classList.toggle("d-none", !on);
   }
 
   function clear(node) {
-    while (node.firstChild) node.removeChild(node.firstChild);
+    node.replaceChildren();
   }
 
   function el(tag, className, text) {
@@ -67,34 +64,48 @@
   }
 
   function emptyRow(cols, text) {
-    const row = document.createElement("tr");
     const cell = el("td", "text-secondary py-4", text);
     cell.colSpan = cols;
-    row.appendChild(cell);
-    return row;
+    const tr = document.createElement("tr");
+    tr.append(cell);
+    return tr;
   }
 
-  function rate(value) {
-    return Number(value).toFixed(1) + "%";
+  function row(cells) {
+    const tr = document.createElement("tr");
+    tr.append(...cells);
+    return tr;
   }
 
-  function parseDate(value) {
+  function statusCell(text, wide) {
+    const cell = document.createElement("td");
+    cell.append(badge(text, wide));
+    return cell;
+  }
+
+  function categoryCell(item) {
+    const cell = document.createElement("td");
+    cell.append(el("span", "badge text-bg-light border", item.type === "income" ? "Income" : item.category));
+    return cell;
+  }
+
+  function at(value) {
     return value.length === 10 ? new Date(value + "T00:00:00") : new Date(value);
   }
 
   function formatDate(value, options) {
-    return parseDate(value).toLocaleDateString("en-US", options);
+    return at(value).toLocaleDateString("en-US", options);
   }
 
   function formatWhen(value) {
-    const date = parseDate(value);
+    const date = at(value);
     const day = date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
     const time = date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
     return day + " at " + time;
   }
 
   function thisMonth(value) {
-    const date = parseDate(value);
+    const date = at(value);
     const now = new Date();
     return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth();
   }
@@ -104,7 +115,7 @@
   }
 
   function bindChrome(user) {
-    setText("nav-user-name", user.firstName + " " + user.lastName);
+    setText("nav-user-name", fullName(user));
     document.querySelectorAll(".js-logout").forEach((link) => {
       link.addEventListener("click", (event) => {
         event.preventDefault();
@@ -117,28 +128,51 @@
   function requireUser() {
     const user = L.currentUser();
     const adminPage = page.startsWith("admin");
-    if (!user) {
-      location.replace("login.html");
-      return null;
-    }
-    if (adminPage && user.role !== "admin") {
-      location.replace("dashboard.html");
-      return null;
-    }
-    if (!adminPage && user.role === "admin") {
-      location.replace("admin.html");
-      return null;
-    }
+    if (!user) return go("login.html");
+    if (adminPage && user.role !== "admin") return go("dashboard.html");
+    if (!adminPage && user.role === "admin") return go("admin.html");
     bindChrome(user);
     return user;
   }
 
-  function balanceText(entry) {
-    return entry.balance == null ? "—" : L.money(entry.balance);
+  function go(url) {
+    location.replace(url);
+    return null;
   }
 
-  function quoteFor(amount, months, rate) {
-    return L.quote(amount, months, rate);
+  function onValid(form, handler) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.classList.add("was-validated");
+        return;
+      }
+      handler();
+    });
+  }
+
+  function loanRow(item, withTerm) {
+    const cells = [
+      el("td", "fw-semibold", item.lender),
+      el("td", null, L.money(item.amount)),
+      el("td", null, rate(item.rate)),
+    ];
+    if (withTerm) cells.push(el("td", null, item.termMonths + " months"));
+    cells.push(el("td", null, item.balance == null ? "—" : L.money(item.balance)), statusCell(item.status, true));
+    return row(cells);
+  }
+
+  function fillRows(node, items, empty, make) {
+    clear(node);
+    if (!items.length) node.append(empty);
+    else items.forEach((item) => node.append(make(item)));
+  }
+
+  function watchList(formId, draw) {
+    const form = $(formId);
+    form.addEventListener("submit", (event) => event.preventDefault());
+    form.addEventListener("input", draw);
+    form.addEventListener("change", draw);
   }
 
   const pages = {
@@ -154,15 +188,11 @@
     "admin-application": renderAdminApplication,
     "admin-borrowers": renderBorrowers,
   };
-
   if (pages[page]) pages[page]();
 
   function renderLogin() {
     const user = L.currentUser();
-    if (user) {
-      location.replace(homeFor(user));
-      return;
-    }
+    if (user) return go(homeFor(user));
     const form = $("login-form");
     const error = $("login-error");
     form.addEventListener("submit", (event) => {
@@ -187,10 +217,7 @@
 
   function renderRegister() {
     const user = L.currentUser();
-    if (user) {
-      location.replace(homeFor(user));
-      return;
-    }
+    if (user) return go(homeFor(user));
     const form = $("register-form");
     const confirm = $("confirm-password");
     const error = $("register-error");
@@ -227,63 +254,35 @@
     if (!user) return;
     const totals = L.totals(user.id);
     const active = L.activeLoansOf(user.id);
-    const incomeRows = L.transactions(user.id).filter((item) => item.type === "income" && thisMonth(item.date));
     const categories = [];
-    incomeRows.forEach((item) => {
-      if (!categories.includes(item.category)) categories.push(item.category);
+    L.transactions(user.id).forEach((item) => {
+      if (item.type === "income" && thisMonth(item.date) && !categories.includes(item.category)) categories.push(item.category);
     });
-    const incomeNote = categories.length
-      ? categories.map((name, index) => (index === 0 ? name : name.toLowerCase())).join(" + ")
-      : "No income logged this month";
-    const expenseNote = L.expensesByCategory(user.id).some((item) => item[0] === "Loan payments")
-      ? "Including loan payments"
-      : "This month";
+    const groups = L.expensesByCategory(user.id);
+    texts({
+      "page-greeting": "Hi, " + user.firstName,
+      "stat-debt": L.money(L.activeDebt(user.id)),
+      "stat-debt-note": active.length + " active loan" + (active.length === 1 ? "" : "s"),
+      "stat-income": L.money(totals.income),
+      "stat-income-note": categories.length
+        ? categories.map((name, index) => (index ? name.toLowerCase() : name)).join(" + ")
+        : "No income logged this month",
+      "stat-expenses": L.money(totals.expenses),
+      "stat-expenses-note": groups.some((item) => item[0] === "Loan payments") ? "Including loan payments" : "This month",
+      "stat-balance": L.money(totals.income - totals.expenses),
+      "stat-balance-note": "Left after expenses",
+    });
 
-    setText("page-greeting", "Hi, " + user.firstName);
-    setText("stat-debt", L.money(L.activeDebt(user.id)));
-    setText("stat-debt-note", active.length + " active loan" + (active.length === 1 ? "" : "s"));
-    setText("stat-income", L.money(totals.income));
-    setText("stat-income-note", incomeNote);
-    setText("stat-expenses", L.money(totals.expenses));
-    setText("stat-expenses-note", expenseNote);
-    setText("stat-balance", L.money(totals.income - totals.expenses));
-    setText("stat-balance-note", "Left after expenses");
-
-    const loans = $("loan-rows");
-    clear(loans);
-    const rows = L.entries(user.id).filter((item) => item.status === "Active" || item.status === "Approved" || item.status === "Pending");
-    if (!rows.length) {
-      loans.appendChild(emptyRow(5, "No loans yet. Apply when you're ready."));
-    } else {
-      rows.forEach((item) => {
-        const row = document.createElement("tr");
-        row.append(
-          el("td", "fw-semibold", item.lender),
-          el("td", null, L.money(item.amount)),
-          el("td", null, rate(item.rate)),
-          el("td", null, balanceText(item)),
-          el("td")
-        );
-        row.lastChild.appendChild(badge(item.status, true));
-        loans.appendChild(row);
-      });
-    }
+    const visible = L.entries(user.id).filter((item) => item.status === "Active" || item.status === "Approved" || item.status === "Pending");
+    fillRows($("loan-rows"), visible, emptyRow(5, "No loans yet. Apply when you're ready."), (item) => loanRow(item, false));
 
     const list = $("spending-list");
-    clear(list);
-    const groups = L.expensesByCategory(user.id);
-    const spent = groups.reduce((sum, item) => sum + item[1], 0);
-    if (!groups.length) {
-      list.appendChild(el("li", "text-secondary", "No expenses this month."));
-      return;
-    }
-    groups.forEach((item) => {
+    const spent = groups.reduce((total, item) => total + item[1], 0);
+    fillRows(list, groups, el("li", "text-secondary", "No expenses this month."), (item) => {
       const name = item[0];
-      const amount = item[1];
-      const pct = spent ? Math.round((amount / spent) * 100) : 0;
-      const li = el("li", "mb-3");
+      const pct = spent ? Math.round((item[1] / spent) * 100) : 0;
       const line = el("div", "d-flex justify-content-between small mb-1");
-      line.append(el("span", null, name), el("span", "fw-semibold", L.money(amount)));
+      line.append(el("span", null, name), el("span", "fw-semibold", L.money(item[1])));
       const bar = el("div", "progress");
       bar.style.height = "8px";
       bar.setAttribute("role", "progressbar");
@@ -293,9 +292,10 @@
       bar.setAttribute("aria-valuemax", "100");
       const fill = el("div", "progress-bar " + (SPEND_COLOR[name] || "bg-secondary"));
       fill.style.width = pct + "%";
-      bar.appendChild(fill);
+      bar.append(fill);
+      const li = el("li", "mb-3");
       li.append(line, bar);
-      list.appendChild(li);
+      return li;
     });
   }
 
@@ -303,30 +303,11 @@
     const user = requireUser();
     if (!user) return;
     let filter = "All";
-    const body = $("loan-rows");
-
     function draw() {
-      clear(body);
       const rows = L.entries(user.id).filter((item) => filter === "All" || item.status === filter);
-      if (!rows.length) {
-        body.appendChild(emptyRow(6, filter === "All" ? "No loans yet." : "No " + filter.toLowerCase() + " loans."));
-        return;
-      }
-      rows.forEach((item) => {
-        const row = document.createElement("tr");
-        row.append(
-          el("td", "fw-semibold", item.lender),
-          el("td", null, L.money(item.amount)),
-          el("td", null, rate(item.rate)),
-          el("td", null, item.termMonths + " months"),
-          el("td", null, balanceText(item)),
-          el("td")
-        );
-        row.lastChild.appendChild(badge(item.status, true));
-        body.appendChild(row);
-      });
+      const empty = filter === "All" ? "No loans yet." : "No " + filter.toLowerCase() + " loans.";
+      fillRows($("loan-rows"), rows, emptyRow(6, empty), (item) => loanRow(item, true));
     }
-
     $("loan-filters").addEventListener("click", (event) => {
       const button = event.target.closest("[data-status]");
       if (!button) return;
@@ -346,52 +327,32 @@
     if (!user) return;
     const form = $("record-form");
     const date = $("date");
-    if (date && !date.value) {
-      const now = new Date();
-      const month = String(now.getMonth() + 1).padStart(2, "0");
-      const day = String(now.getDate()).padStart(2, "0");
-      date.value = now.getFullYear() + "-" + month + "-" + day;
-    }
+    if (date && !date.value) date.value = new Date().toLocaleDateString("en-CA");
 
     function draw() {
       const totals = L.totals(user.id);
-      const groups = L.expensesByCategory(user.id);
-      const top = groups[0];
+      const top = L.expensesByCategory(user.id)[0];
       const flow = totals.income - totals.expenses;
-      setText("stat-income", L.money(totals.income));
-      setText("stat-expenses", L.money(totals.expenses));
-      setText("stat-cash", (flow > 0 ? "+" : "") + L.money(flow));
-      setText("stat-top", top ? top[0] : "—");
-      setText("stat-top-note", top ? L.money(top[1]) + " this month" : "No expenses yet");
-
-      const body = $("record-rows");
-      clear(body);
-      const rows = L.transactions(user.id);
-      if (!rows.length) {
-        body.appendChild(emptyRow(4, "No records yet. Add income or an expense."));
-        return;
-      }
-      rows.forEach((item) => {
-        const row = document.createElement("tr");
+      texts({
+        "stat-income": L.money(totals.income),
+        "stat-expenses": L.money(totals.expenses),
+        "stat-cash": (flow > 0 ? "+" : "") + L.money(flow),
+        "stat-top": top ? top[0] : "—",
+        "stat-top-note": top ? L.money(top[1]) + " this month" : "No expenses yet",
+      });
+      fillRows($("record-rows"), L.transactions(user.id), emptyRow(4, "No records yet. Add income or an expense."), (item) => {
         const amount = el("td", "text-end fw-semibold" + (item.type === "income" ? " text-success" : ""));
-        amount.textContent = item.type === "income" ? L.money(item.amount) : "-" + L.money(item.amount);
-        row.append(
+        amount.textContent = (item.type === "income" ? "" : "-") + L.money(item.amount);
+        return row([
           el("td", "text-secondary", formatDate(item.date, { month: "short", day: "numeric" })),
           el("td", "fw-semibold", item.description),
-          el("td"),
-          amount
-        );
-        row.children[2].appendChild(el("span", "badge text-bg-light border", item.type === "income" ? "Income" : item.category));
-        body.appendChild(row);
+          categoryCell(item),
+          amount,
+        ]);
       });
     }
 
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      if (!form.checkValidity()) {
-        form.classList.add("was-validated");
-        return;
-      }
+    onValid(form, () => {
       const data = new FormData(form);
       L.addTransaction(user.id, {
         type: data.get("type"),
@@ -414,7 +375,6 @@
     if (!user) return;
     const form = $("apply-form");
     const draft = L.draft(user.id);
-    const totals = L.totals(user.id);
     if (draft) {
       form.amount.value = draft.amount;
       form.term_months.value = String(draft.termMonths);
@@ -426,26 +386,22 @@
     } else {
       if (user.employmentStatus) form.employment_status.value = user.employmentStatus;
       form.employer.value = user.employer || "";
-      form.monthly_income.value = totals.income;
+      form.monthly_income.value = L.totals(user.id).income;
       form.existing_debt.value = L.activeDebt(user.id);
     }
 
     function paintQuote() {
-      const estimate = quoteFor(form.amount.value, form.term_months.value, L.ANNUAL_RATE);
-      setText("estimate-monthly", L.money(estimate.monthly, 2));
-      setText("estimate-amount", L.money(Number(form.amount.value) || 0, 2));
-      setText("estimate-interest", L.money(estimate.interest, 2));
-      setText("estimate-total", L.money(estimate.total, 2));
+      const estimate = L.quote(form.amount.value, form.term_months.value, L.ANNUAL_RATE);
+      texts({
+        "estimate-monthly": cents(estimate.monthly),
+        "estimate-amount": cents(Number(form.amount.value) || 0),
+        "estimate-interest": cents(estimate.interest),
+        "estimate-total": cents(estimate.total),
+      });
     }
-
     form.addEventListener("input", paintQuote);
     paintQuote();
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      if (!form.checkValidity()) {
-        form.classList.add("was-validated");
-        return;
-      }
+    onValid(form, () => {
       L.saveDraft(user.id, {
         amount: form.amount.value,
         termMonths: form.term_months.value,
@@ -463,77 +419,79 @@
     const user = requireUser();
     if (!user) return;
     const draft = L.draft(user.id);
-    if (!draft) {
-      location.replace("apply.html");
-      return;
-    }
-    const estimate = quoteFor(draft.amount, draft.termMonths, L.ANNUAL_RATE);
-    setText("rev-amount", L.money(draft.amount, 2));
-    setText("rev-term", draft.termMonths + " months");
-    setText("rev-purpose", draft.purpose);
-    setText("rev-employment", draft.employmentStatus);
-    setText("rev-employer", draft.employer || "—");
-    setText("rev-income", L.money(draft.monthlyIncome));
-    setText("rev-debt", L.money(draft.existingDebt));
-    setText("rev-monthly", L.money(estimate.monthly, 2));
-    setText("rev-interest", L.money(estimate.interest, 2));
-    setText("rev-total", L.money(estimate.total, 2));
+    if (!draft) return go("apply.html");
+    const estimate = L.quote(draft.amount, draft.termMonths, L.ANNUAL_RATE);
+    texts({
+      "rev-amount": cents(draft.amount),
+      "rev-term": draft.termMonths + " months",
+      "rev-purpose": draft.purpose,
+      "rev-employment": draft.employmentStatus,
+      "rev-employer": draft.employer || "—",
+      "rev-income": L.money(draft.monthlyIncome),
+      "rev-debt": L.money(draft.existingDebt),
+      "rev-monthly": cents(estimate.monthly),
+      "rev-interest": cents(estimate.interest),
+      "rev-total": cents(estimate.total),
+    });
     $("review-form").addEventListener("submit", (event) => {
       event.preventDefault();
-      const app = L.submitApplication(user.id);
-      location.href = "application.html?id=" + encodeURIComponent(app.id);
+      location.href = "application.html?id=" + L.submitApplication(user.id).id;
     });
   }
 
   function renderApplication() {
     const user = requireUser();
     if (!user) return;
-    const params = new URLSearchParams(location.search);
-    const requested = params.get("id");
+    const requested = new URLSearchParams(location.search).get("id");
     let app = requested ? L.application(requested) : L.latestApplication(user.id);
     if (app && app.userId !== user.id) app = null;
     show("application-empty", !app);
     show("application-has", !!app);
     if (!app) return;
 
-    const estimate = quoteFor(app.amount, app.termMonths, app.rate);
-    setText("app-title", "Application #" + app.id);
-    setText("app-subtitle", "Submitted on " + formatDate(app.submittedAt, { month: "short", day: "numeric", year: "numeric" }));
-    paintBadge("app-status", app.status);
-    setText("sum-amount", L.money(app.amount, 2));
-    setText("sum-term", app.termMonths + " months");
-    setText("sum-purpose", app.purpose);
-    setText("sum-payment", L.money(estimate.monthly, 2));
-    paintBadge("sum-status", app.status);
-    show("submitted-alert", app.status === "Pending");
-
-    const timeline = $("timeline");
-    clear(timeline);
-    timeline.appendChild(step(true, false, "bi-check-lg", "Application submitted", formatWhen(app.submittedAt)));
-    if (app.status === "Pending") {
-      timeline.appendChild(step(false, true, "bi-hourglass-split", "Admin review", "An administrator is checking your details. You don't need to do anything right now. We'll show the decision here as soon as it's made."));
-      timeline.appendChild(step(false, false, "bi-flag", "Decision", "You'll see here if your loan was approved or rejected, with the next steps."));
-    } else {
-      timeline.appendChild(step(true, false, "bi-check-lg", "Admin review", "Reviewed on " + formatWhen(app.decidedAt)));
-      const approved = app.status === "Approved";
-      timeline.appendChild(step(true, false, approved ? "bi-check-lg" : "bi-x-lg", approved ? "Approved" : "Not approved", app.note || (approved ? "Your loan was approved." : "Your loan was not approved.")));
-    }
-
+    const estimate = L.quote(app.amount, app.termMonths, app.rate);
     const pending = app.status === "Pending";
-    setText("outcome-heading", pending ? "Possible decisions" : "Decision");
+    texts({
+      "app-title": "Application #" + app.id,
+      "app-subtitle": "Submitted on " + formatDate(app.submittedAt, { month: "short", day: "numeric", year: "numeric" }),
+      "sum-amount": cents(app.amount),
+      "sum-term": app.termMonths + " months",
+      "sum-purpose": app.purpose,
+      "sum-payment": cents(estimate.monthly),
+      "outcome-heading": pending ? "Possible decisions" : "Decision",
+      "outcome-approved-lead": "Congratulations! Your loan of " + cents(app.amount) + " was approved.",
+      "outcome-rejected-lead": app.status === "Rejected" && app.note ? app.note : "Your current debt is too high compared to your income for this amount.",
+      "outcome-rejected-next": "Next step: try a smaller amount or a longer term, or apply again in 30 days.",
+    });
+    paintBadge("app-status", app.status);
+    paintBadge("sum-status", app.status);
+    show("submitted-alert", pending);
     show("outcome-intro", pending);
     show("outcome-approved", pending || app.status === "Approved");
     show("outcome-rejected", pending || app.status === "Rejected");
-    setText("outcome-approved-lead", "Congratulations! Your loan of " + L.money(app.amount, 2) + " was approved.");
     fillApprovedNext(estimate.monthly);
-    setText("outcome-rejected-lead", app.status === "Rejected" && app.note ? app.note : "Your current debt is too high compared to your income for this amount.");
-    setText("outcome-rejected-next", "Next step: try a smaller amount or a longer term, or apply again in 30 days.");
+
+    const timeline = $("timeline");
+    clear(timeline);
+    timeline.append(step(true, false, "bi-check-lg", "Application submitted", formatWhen(app.submittedAt)));
+    if (pending) {
+      timeline.append(
+        step(false, true, "bi-hourglass-split", "Admin review", "An administrator is checking your details. You don't need to do anything right now. We'll show the decision here as soon as it's made."),
+        step(false, false, "bi-flag", "Decision", "You'll see here if your loan was approved or rejected, with the next steps.")
+      );
+    } else {
+      const approved = app.status === "Approved";
+      timeline.append(
+        step(true, false, "bi-check-lg", "Admin review", "Reviewed on " + formatWhen(app.decidedAt)),
+        step(true, false, approved ? "bi-check-lg" : "bi-x-lg", approved ? "Approved" : "Not approved", app.note || (approved ? "Your loan was approved." : "Your loan was not approved."))
+      );
+    }
   }
 
   function step(done, current, icon, title, detail) {
     const item = el("li", done ? "done" : current ? "current" : "");
     const dot = el("span", "dot");
-    dot.appendChild(el("i", "bi " + icon));
+    dot.append(el("i", "bi " + icon));
     item.append(dot, el("p", "fw-semibold mb-0", title), el("p", "small text-secondary mb-0", detail));
     return item;
   }
@@ -542,92 +500,69 @@
     const node = $("outcome-approved-next");
     if (!node) return;
     clear(node);
-    node.appendChild(el("strong", null, "Next step: "));
-    node.appendChild(document.createTextNode("you'll receive the funds and see the loan in "));
     const link = el("a", "alert-link", "My loans");
     link.href = "loans.html";
-    node.appendChild(link);
-    node.appendChild(document.createTextNode(". Your first payment of " + L.money(payment, 2) + " is due 30 days later."));
+    node.append(
+      el("strong", null, "Next step: "),
+      document.createTextNode("you'll receive the funds and see the loan in "),
+      link,
+      document.createTextNode(". Your first payment of " + cents(payment) + " is due 30 days later.")
+    );
   }
 
   function renderAdmin() {
     const user = requireUser();
     if (!user) return;
-    let query = "";
-    let status = "All";
 
     function draw() {
       const stats = L.portfolio();
-      setText("page-greeting", "Welcome back, " + user.firstName + ". Monitor lending activity and review new requests.");
-      setText("stat-requests", String(stats.totalRequests));
-      setText("stat-requests-note", "+" + stats.requestsThisMonth + " this month");
-      setText("stat-pending", String(stats.pending));
-      setText("stat-pending-note", stats.oldestLabel);
-      setText("stat-volume", L.money(stats.approvedVolume));
-      setText("stat-volume-note", stats.approvedLoans + " approved loans");
-      setText("stat-borrowers", String(stats.activeBorrowers));
-      setText("stat-borrowers-note", stats.newBorrowersThisMonth + " new this month");
-
-      const body = $("queue-rows");
-      clear(body);
-      const needle = query.trim().toLowerCase();
-      const rows = L.applications().filter((app) => {
-        if (status !== "All" && app.status !== status) return false;
-        if (!needle) return true;
-        const person = L.user(app.userId);
-        const name = person ? (person.firstName + " " + person.lastName).toLowerCase() : "";
-        return name.includes(needle) || app.id.toLowerCase().includes(needle);
+      const needle = $("queue-search").value.trim().toLowerCase();
+      const status = $("queue-status").value;
+      texts({
+        "page-greeting": "Welcome back, " + user.firstName + ". Monitor lending activity and review new requests.",
+        "stat-requests": String(stats.totalRequests),
+        "stat-requests-note": "+" + stats.requestsThisMonth + " this month",
+        "stat-pending": String(stats.pending),
+        "stat-pending-note": stats.oldestLabel,
+        "stat-volume": L.money(stats.approvedVolume),
+        "stat-volume-note": stats.approvedLoans + " approved loans",
+        "stat-borrowers": String(stats.activeBorrowers),
+        "stat-borrowers-note": stats.newBorrowersThisMonth + " new this month",
       });
-      if (!rows.length) {
-        body.appendChild(emptyRow(8, "No applications match."));
-        return;
-      }
-      rows.forEach((app) => {
+      const rows = L.applications().filter((app) => {
         const person = L.user(app.userId);
-        const row = document.createElement("tr");
+        const name = fullName(person).toLowerCase();
+        const matches = !needle || name.includes(needle) || app.id.toLowerCase().includes(needle);
+        return (status === "All" || app.status === status) && matches;
+      });
+      fillRows($("queue-rows"), rows, emptyRow(8, "No applications match."), (app) => {
+        const person = L.user(app.userId);
         const request = el("td");
         request.append(document.createTextNode(L.money(app.amount) + " "), el("span", "text-secondary small", "/ " + app.termMonths + " mo"));
-        const actions = el("td");
-        const wrap = el("div", "d-flex gap-1 justify-content-end");
+        const actions = el("div", "d-flex gap-1 justify-content-end");
         const view = el("a", "btn btn-sm btn-outline-secondary", "View");
-        view.href = "admin-application.html?id=" + encodeURIComponent(app.id);
-        wrap.appendChild(view);
+        view.href = "admin-application.html?id=" + app.id;
+        actions.append(view);
         if (app.status === "Pending") {
-          wrap.appendChild(iconButton("btn-success", "bi-check-lg", "Approve " + app.id, () => {
-            L.decide(app.id, "Approved", "");
-            draw();
-          }));
-          wrap.appendChild(iconButton("btn-danger", "bi-x-lg", "Reject " + app.id, () => {
-            L.decide(app.id, "Rejected", "");
-            draw();
-          }));
+          actions.append(
+            iconButton("btn-success", "bi-check-lg", "Approve " + app.id, () => { L.decide(app.id, "Approved", ""); draw(); }),
+            iconButton("btn-danger", "bi-x-lg", "Reject " + app.id, () => { L.decide(app.id, "Rejected", ""); draw(); })
+          );
         }
-        actions.appendChild(wrap);
-        row.append(
+        return row([
           el("td", "text-secondary", "#" + app.id),
-          el("td", "fw-semibold", person ? person.firstName + " " + person.lastName : "Unknown"),
+          el("td", "fw-semibold", fullName(person)),
           request,
           el("td", null, L.money(app.monthlyIncome)),
           el("td", null, L.money(app.existingDebt)),
           el("td", "text-secondary", formatDate(app.submittedAt, { month: "short", day: "numeric" })),
-          el("td"),
-          actions
-        );
-        row.children[6].appendChild(badge(app.status, true));
-        body.appendChild(row);
+          statusCell(app.status, true),
+          el("td").appendChild(actions).parentNode,
+        ]);
       });
     }
 
-    const form = $("queue-form");
-    form.addEventListener("submit", (event) => event.preventDefault());
-    $("queue-search").addEventListener("input", (event) => {
-      query = event.target.value;
-      draw();
-    });
-    $("queue-status").addEventListener("change", (event) => {
-      status = event.target.value;
-      draw();
-    });
+    watchList("queue-form", draw);
     draw();
   }
 
@@ -635,7 +570,7 @@
     const button = el("button", "btn btn-sm " + style);
     button.type = "button";
     button.setAttribute("aria-label", label);
-    button.appendChild(el("i", "bi " + icon));
+    button.append(el("i", "bi " + icon));
     button.addEventListener("click", onClick);
     return button;
   }
@@ -643,124 +578,89 @@
   function renderAdminApplication() {
     const user = requireUser();
     if (!user) return;
-    const params = new URLSearchParams(location.search);
-    const app = L.application(params.get("id"));
-    if (!app) {
-      location.replace("admin.html");
-      return;
-    }
+    const app = L.application(new URLSearchParams(location.search).get("id"));
+    if (!app) return go("admin.html");
     const person = L.user(app.userId);
-    const estimate = quoteFor(app.amount, app.termMonths, app.rate);
-    const name = person ? person.firstName + " " + person.lastName : "Unknown";
-    setText("crumb-current", "#" + app.id);
-    setText("app-title", "Application #" + app.id);
-    setText("app-subtitle", "Submitted by " + name + " on " + formatDate(app.submittedAt, { month: "short", day: "numeric", year: "numeric" }));
+    const estimate = L.quote(app.amount, app.termMonths, app.rate);
+    const name = fullName(person);
+    texts({
+      "crumb-current": "#" + app.id,
+      "app-title": "Application #" + app.id,
+      "app-subtitle": "Submitted by " + name + " on " + formatDate(app.submittedAt, { month: "short", day: "numeric", year: "numeric" }),
+      "req-amount": cents(app.amount),
+      "req-term": app.termMonths + " months",
+      "req-payment": cents(estimate.monthly),
+      "req-purpose": app.purpose,
+      "person-name": name,
+      "person-email": person ? person.email : "—",
+      "person-employment": app.employmentStatus || "—",
+      "person-since": person ? formatDate(person.customerSince, { month: "long", year: "numeric" }) : "—",
+      "fin-income": L.money(app.monthlyIncome),
+      "fin-expenses": L.money(app.monthlyExpenses),
+      "fin-debt": L.money(app.existingDebt),
+      dti: app.monthlyIncome ? (app.existingDebt / app.monthlyIncome).toFixed(1) + "x monthly income" : "n/a",
+    });
     paintBadge("app-status", app.status);
     show("decision-alert", app.status !== "Pending");
-    setText("req-amount", L.money(app.amount, 2));
-    setText("req-term", app.termMonths + " months");
-    setText("req-payment", L.money(estimate.monthly, 2));
-    setText("req-purpose", app.purpose);
-    setText("person-name", name);
-    setText("person-email", person ? person.email : "—");
-    setText("person-employment", app.employmentStatus || "—");
-    setText("person-since", person ? formatDate(person.customerSince, { month: "long", year: "numeric" }) : "—");
-    setText("fin-income", L.money(app.monthlyIncome));
-    setText("fin-expenses", L.money(app.monthlyExpenses));
-    setText("fin-debt", L.money(app.existingDebt));
-
-    const lenders = $("lender-rows");
-    clear(lenders);
-    const loans = L.activeLoansOf(app.userId);
-    if (!loans.length) {
-      lenders.appendChild(emptyRow(4, "No active loans."));
-    } else {
-      loans.forEach((item) => {
-        const row = document.createElement("tr");
-        row.append(el("td", "fw-semibold", item.lender), el("td", null, L.money(item.balance)), el("td", null, rate(item.rate)), el("td"));
-        row.lastChild.appendChild(badge(item.status, true));
-        lenders.appendChild(row);
-      });
-    }
-
-    const ratio = app.monthlyIncome ? app.existingDebt / app.monthlyIncome : 0;
-    setText("dti", app.monthlyIncome ? ratio.toFixed(1) + "x monthly income" : "n/a");
+    fillRows($("lender-rows"), L.activeLoansOf(app.userId), emptyRow(4, "No active loans."), (item) => row([
+      el("td", "fw-semibold", item.lender),
+      el("td", null, L.money(item.balance)),
+      el("td", null, rate(item.rate)),
+      statusCell(item.status, true),
+    ]));
 
     const form = $("decision-form");
     const note = $("note");
-    note.value = app.note || "";
     const locked = app.status !== "Pending";
+    note.value = app.note || "";
     note.disabled = locked;
-    form.querySelectorAll("button").forEach((button) => {
-      button.disabled = locked;
-    });
+    form.querySelectorAll("button").forEach((button) => { button.disabled = locked; });
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       if (locked || !event.submitter) return;
       L.decide(app.id, event.submitter.value === "approved" ? "Approved" : "Rejected", note.value);
-      location.href = "admin-application.html?id=" + encodeURIComponent(app.id);
+      location.href = "admin-application.html?id=" + app.id;
     });
   }
 
   function renderBorrowers() {
     const user = requireUser();
     if (!user) return;
-    let query = "";
-    let status = "All";
     const all = L.borrowers();
     setText("borrower-count", L.portfolio().activeBorrowers + " active borrowers");
 
     function draw() {
-      const needle = query.trim().toLowerCase();
+      const needle = $("borrower-search").value.trim().toLowerCase();
+      const status = $("borrower-status").value;
       const rows = all.filter((item) => {
-        if (status !== "All" && item.status !== status) return false;
-        if (!needle) return true;
-        const name = (item.user.firstName + " " + item.user.lastName + " " + item.user.email).toLowerCase();
-        return name.includes(needle);
+        const name = (fullName(item.user) + " " + item.user.email).toLowerCase();
+        return (status === "All" || item.status === status) && (!needle || name.includes(needle));
       });
       setText("borrower-shown", "Showing " + rows.length + " of " + all.length);
-      const body = $("borrower-rows");
-      clear(body);
-      if (!rows.length) {
-        body.appendChild(emptyRow(7, "No borrowers match."));
-        return;
-      }
-      rows.forEach((item) => {
-        const row = document.createElement("tr");
+      fillRows($("borrower-rows"), rows, emptyRow(7, "No borrowers match."), (item) => {
         const who = el("td");
-        who.append(el("span", "fw-semibold d-block", item.user.firstName + " " + item.user.lastName), el("span", "small text-secondary", item.user.email));
+        who.append(el("span", "fw-semibold d-block", fullName(item.user)), el("span", "small text-secondary", item.user.email));
         const profile = el("td", "text-end");
         if (item.latestApplicationId) {
           const link = el("a", "btn btn-sm btn-outline-secondary", "View profile");
-          link.href = "admin-application.html?id=" + encodeURIComponent(item.latestApplicationId);
-          profile.appendChild(link);
+          link.href = "admin-application.html?id=" + item.latestApplicationId;
+          profile.append(link);
         } else {
-          profile.appendChild(el("span", "small text-secondary", "No application"));
+          profile.append(el("span", "small text-secondary", "No application"));
         }
-        row.append(
+        return row([
           who,
           el("td", null, String(item.loanCount)),
           el("td", null, L.money(item.debt)),
           el("td", null, L.money(item.monthlyIncome)),
           el("td", "text-secondary", formatDate(item.user.customerSince, { month: "short", year: "numeric" })),
-          el("td"),
-          profile
-        );
-        row.children[5].appendChild(badge(item.status, false));
-        body.appendChild(row);
+          statusCell(item.status, false),
+          profile,
+        ]);
       });
     }
 
-    const form = $("borrower-form");
-    form.addEventListener("submit", (event) => event.preventDefault());
-    $("borrower-search").addEventListener("input", (event) => {
-      query = event.target.value;
-      draw();
-    });
-    $("borrower-status").addEventListener("change", (event) => {
-      status = event.target.value;
-      draw();
-    });
+    watchList("borrower-form", draw);
     draw();
   }
 })();

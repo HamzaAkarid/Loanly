@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
-<body class="app bg-light">
+<body class="app bg-light" data-page="admin-application">
   <nav class="navbar navbar-expand-lg bg-white border-bottom">
     <div class="container">
       <a class="navbar-brand fw-bold" href="admin.html">LOAN<span>LY</span> <span class="badge text-bg-dark fs-6 align-middle ms-1">Admin</span></a>
@@ -42,12 +42,12 @@
         </ul>
         <div class="dropdown">
           <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle me-1"></i>Morgan Lee
+            <i class="bi bi-person-circle me-1"></i><span id="nav-user-name">Morgan Lee</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="#">Profile</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="login.html">Log out</a></li>
+            <li><a class="dropdown-item js-logout" href="login.html">Log out</a></li>
           </ul>
         </div>
       </div>
@@ -59,21 +59,23 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="admin.html">Overview</a></li>
         <li class="breadcrumb-item"><a href="admin.html#queue">Applications</a></li>
-        <li class="breadcrumb-item active" aria-current="page">#LN-1042</li>
+        <li class="breadcrumb-item active" aria-current="page" id="crumb-current">#LN-1042</li>
       </ol>
     </nav>
 
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
       <div>
-        <h1 class="h3 fw-bold mb-1">Application #LN-1042</h1>
-        <p class="text-secondary mb-0">Submitted by Alex Johnson on Nov 26, 2026</p>
+        <h1 class="h3 fw-bold mb-1" id="app-title">Application #LN-1042</h1>
+        <p class="text-secondary mb-0" id="app-subtitle">Submitted by Alex Johnson on Nov 26, 2026</p>
       </div>
-      <span class="badge status-badge text-bg-warning">Pending</span>
+      <span class="badge status-badge text-bg-warning" id="app-status">Pending</span>
     </div>
 
-    <div class="alert alert-success d-flex align-items-center gap-2" role="alert">
-      <i class="bi bi-check-circle-fill"></i>
-      <div><strong>Decision saved.</strong> Example of the message shown after approving or rejecting. The client's view updates automatically.</div>
+    <div class="alert alert-success d-none" role="alert" id="decision-alert">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-check-circle-fill"></i>
+        <div><strong>Decision saved.</strong> The client's application status is updated.</div>
+      </div>
     </div>
 
     <div class="row g-4">
@@ -81,34 +83,34 @@
         <div class="card mb-4">
           <div class="card-header bg-white py-3"><h2 class="h6 fw-bold mb-0">Loan request</h2></div>
           <div class="card-body row g-3">
-            <div class="col-sm-6 col-md-3"><p class="small text-secondary mb-1">Amount</p><p class="fw-bold mb-0">$5,000.00</p></div>
-            <div class="col-sm-6 col-md-3"><p class="small text-secondary mb-1">Term</p><p class="fw-bold mb-0">12 months</p></div>
-            <div class="col-sm-6 col-md-3"><p class="small text-secondary mb-1">Monthly payment</p><p class="fw-bold mb-0">$444.24</p></div>
-            <div class="col-sm-6 col-md-3"><p class="small text-secondary mb-1">Purpose</p><p class="fw-bold mb-0">Debt consolidation</p></div>
+            <div class="col-sm-6 col-md-3"><p class="small text-secondary mb-1">Amount</p><p class="fw-bold mb-0" id="req-amount">$5,000.00</p></div>
+            <div class="col-sm-6 col-md-3"><p class="small text-secondary mb-1">Term</p><p class="fw-bold mb-0" id="req-term">12 months</p></div>
+            <div class="col-sm-6 col-md-3"><p class="small text-secondary mb-1">Monthly payment</p><p class="fw-bold mb-0" id="req-payment">$444.24</p></div>
+            <div class="col-sm-6 col-md-3"><p class="small text-secondary mb-1">Purpose</p><p class="fw-bold mb-0" id="req-purpose">Debt consolidation</p></div>
           </div>
         </div>
 
         <div class="card mb-4">
           <div class="card-header bg-white py-3"><h2 class="h6 fw-bold mb-0">Applicant</h2></div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Name</span><strong>Alex Johnson</strong></li>
-            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Email</span><strong>alex.johnson@example.com</strong></li>
-            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Employment</span><strong>Employed full time</strong></li>
-            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Customer since</span><strong>March 2025</strong></li>
+            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Name</span><strong id="person-name">Alex Johnson</strong></li>
+            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Email</span><strong id="person-email">alex.johnson@example.com</strong></li>
+            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Employment</span><strong id="person-employment">Employed full time</strong></li>
+            <li class="list-group-item d-flex justify-content-between"><span class="text-secondary">Customer since</span><strong id="person-since">March 2025</strong></li>
           </ul>
         </div>
 
         <div class="card">
           <div class="card-header bg-white py-3"><h2 class="h6 fw-bold mb-0">Financial summary</h2></div>
           <div class="card-body row g-3">
-            <div class="col-sm-4"><p class="small text-secondary mb-1">Monthly income</p><p class="h5 fw-bold text-success mb-0">$4,800</p></div>
-            <div class="col-sm-4"><p class="small text-secondary mb-1">Monthly expenses</p><p class="h5 fw-bold mb-0">$3,170</p></div>
-            <div class="col-sm-4"><p class="small text-secondary mb-1">Existing debt</p><p class="h5 fw-bold text-danger mb-0">$10,150</p></div>
+            <div class="col-sm-4"><p class="small text-secondary mb-1">Monthly income</p><p class="h5 fw-bold text-success mb-0" id="fin-income">$4,800</p></div>
+            <div class="col-sm-4"><p class="small text-secondary mb-1">Monthly expenses</p><p class="h5 fw-bold mb-0" id="fin-expenses">$3,170</p></div>
+            <div class="col-sm-4"><p class="small text-secondary mb-1">Existing debt</p><p class="h5 fw-bold text-danger mb-0" id="fin-debt">$10,150</p></div>
           </div>
           <div class="table-responsive">
             <table class="table text-nowrap align-middle">
               <thead><tr><th>Current lender</th><th>Balance</th><th>Rate</th><th>Status</th></tr></thead>
-              <tbody>
+              <tbody id="lender-rows">
                 <tr><td class="fw-semibold">Northwind Bank</td><td>$7,840</td><td>8.5%</td><td><span class="badge status-badge text-bg-primary">Active</span></td></tr>
                 <tr><td class="fw-semibold">Contoso Credit Union</td><td>$2,310</td><td>11.0%</td><td><span class="badge status-badge text-bg-primary">Active</span></td></tr>
               </tbody>
@@ -121,7 +123,7 @@
         <div class="card sticky-lg-top" style="top: 1.5rem">
           <div class="card-header bg-white py-3"><h2 class="h6 fw-bold mb-0">Decision</h2></div>
           <div class="card-body">
-            <form action="#" method="post">
+            <form id="decision-form" action="#" method="post">
               <div class="mb-3">
                 <label for="note" class="form-label">Note for the client</label>
                 <textarea class="form-control" id="note" name="note" rows="4" placeholder="Explain the decision and next steps"></textarea>
@@ -132,7 +134,7 @@
               </div>
             </form>
             <hr />
-            <p class="small text-secondary mb-0"><i class="bi bi-info-circle me-1"></i>Debt-to-income: <strong>2.1x monthly income</strong></p>
+            <p class="small text-secondary mb-0"><i class="bi bi-info-circle me-1"></i>Debt-to-income: <strong id="dti">2.1x monthly income</strong></p>
           </div>
         </div>
       </div>
@@ -144,5 +146,7 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+  <script src="js/store.js"></script>
+  <script src="js/pages.js"></script>
 </body>
 </html>

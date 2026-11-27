@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
-<body class="app bg-light">
+<body class="app bg-light" data-page="admin">
   <nav class="navbar navbar-expand-lg bg-white border-bottom">
     <div class="container">
       <a class="navbar-brand fw-bold" href="admin.html">LOAN<span>LY</span> <span class="badge text-bg-dark fs-6 align-middle ms-1">Admin</span></a>
@@ -42,12 +42,12 @@
         </ul>
         <div class="dropdown">
           <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle me-1"></i>Morgan Lee
+            <i class="bi bi-person-circle me-1"></i><span id="nav-user-name">Morgan Lee</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="#">Profile</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="login.html">Log out</a></li>
+            <li><a class="dropdown-item js-logout" href="login.html">Log out</a></li>
           </ul>
         </div>
       </div>
@@ -58,7 +58,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
       <div>
         <h1 class="h3 fw-bold mb-1">Portfolio overview</h1>
-        <p class="text-secondary mb-0">Welcome back, Morgan. Monitor lending activity and review new requests.</p>
+        <p class="text-secondary mb-0" id="page-greeting">Welcome back, Morgan. Monitor lending activity and review new requests.</p>
       </div>
     </div>
 
@@ -69,8 +69,8 @@
             <span class="stat-icon text-bg-primary"><i class="bi bi-inbox"></i></span>
             <div>
               <p class="small text-secondary mb-1">Total requests</p>
-              <p class="h4 fw-bold mb-0">128</p>
-            <p class="small text-secondary mb-0">+14 this month</p>
+              <p class="h4 fw-bold mb-0" id="stat-requests">128</p>
+            <p class="small text-secondary mb-0" id="stat-requests-note">+14 this month</p>
             </div>
           </div>
         </div>
@@ -81,8 +81,8 @@
             <span class="stat-icon text-bg-warning"><i class="bi bi-hourglass-split"></i></span>
             <div>
               <p class="small text-secondary mb-1">Pending review</p>
-              <p class="h4 fw-bold mb-0">3</p>
-            <p class="small text-secondary mb-0">Oldest: 2 days</p>
+              <p class="h4 fw-bold mb-0" id="stat-pending">3</p>
+            <p class="small text-secondary mb-0" id="stat-pending-note">Oldest: 2 days</p>
             </div>
           </div>
         </div>
@@ -93,8 +93,8 @@
             <span class="stat-icon text-bg-success"><i class="bi bi-cash-stack"></i></span>
             <div>
               <p class="small text-secondary mb-1">Approved volume</p>
-              <p class="h4 fw-bold mb-0">$412,500</p>
-            <p class="small text-secondary mb-0">86 approved loans</p>
+              <p class="h4 fw-bold mb-0" id="stat-volume">$412,500</p>
+            <p class="small text-secondary mb-0" id="stat-volume-note">86 approved loans</p>
             </div>
           </div>
         </div>
@@ -105,8 +105,8 @@
             <span class="stat-icon text-bg-secondary"><i class="bi bi-people"></i></span>
             <div>
               <p class="small text-secondary mb-1"><a href="admin-borrowers.html" class="link-secondary">Active borrowers</a></p>
-              <p class="h4 fw-bold mb-0">74</p>
-            <p class="small text-secondary mb-0">12 new this month</p>
+              <p class="h4 fw-bold mb-0" id="stat-borrowers">74</p>
+            <p class="small text-secondary mb-0" id="stat-borrowers-note">12 new this month</p>
             </div>
           </div>
         </div>
@@ -116,13 +116,13 @@
     <div class="card" id="queue">
       <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2 py-3">
         <h2 class="h6 fw-bold mb-0">Application queue</h2>
-        <form class="d-flex gap-2" role="search" action="#">
-          <input class="form-control form-control-sm" type="search" name="q" placeholder="Search applicant" aria-label="Search applicant" />
-          <select class="form-select form-select-sm" name="status" aria-label="Filter by status">
-            <option>All statuses</option>
-            <option>Pending</option>
-            <option>Approved</option>
-            <option>Rejected</option>
+        <form class="d-flex gap-2" id="queue-form" role="search" action="#">
+          <input class="form-control form-control-sm" id="queue-search" type="search" name="q" placeholder="Search applicant" aria-label="Search applicant" />
+          <select class="form-select form-select-sm" id="queue-status" name="status" aria-label="Filter by status">
+            <option value="All">All statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
           </select>
         </form>
       </div>
@@ -131,7 +131,7 @@
           <thead>
             <tr><th>ID</th><th>Applicant</th><th>Request</th><th>Monthly income</th><th>Existing debt</th><th>Submitted</th><th>Status</th><th class="text-end">Actions</th></tr>
           </thead>
-          <tbody>
+          <tbody id="queue-rows">
             <tr>
               <td class="text-secondary">#LN-1042</td>
               <td class="fw-semibold">Alex Johnson</td>
@@ -227,5 +227,7 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+  <script src="js/store.js"></script>
+  <script src="js/pages.js"></script>
 </body>
 </html>
